@@ -228,15 +228,15 @@ impl<'de, T: ?Sized + 'static> Deserialize<'de> for Vtable<T> {
 							id
 						);
 					}
-					Ok(Self::new(ptr))
 				} else {
-					Err(de::Error::custom(format_args!(
-						"relative reference to wrong type ???:{}, expected {}:{}",
+					log::warn!(
+						"relative reference to wrong type {}:{}, expected {}:{}",
 						id,
 						type_name::<T>(),
 						type_id::<T>()
-					)))
+					);
 				}
+				Ok(Self::new(ptr))
 			},
 		)
 	}

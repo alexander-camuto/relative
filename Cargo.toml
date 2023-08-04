@@ -22,8 +22,10 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 build_id = "0.2"
+log = { version = "0.4.17", default_features = false}
 serde = "1.0"
 uuid = { version = "0.8", features = ["serde"] }
+
 
 [dev-dependencies]
 bincode = "1.0"

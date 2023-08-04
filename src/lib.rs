@@ -62,6 +62,7 @@
 	clippy::must_use_candidate
 )]
 
+
 use serde::{
 	de::{self, Deserialize, Deserializer}, ser::{Serialize, Serializer}
 };
@@ -219,21 +220,21 @@ impl<'de, T: ?Sized + 'static> Deserialize<'de> for Vtable<T> {
 		<(Uuid, u64, usize) as Deserialize<'de>>::deserialize(deserializer).and_then(
 			|(build, id, ptr)| {
 				let local = build_id::get();
-				if build == local {
-					if id == type_id::<T>() {
-						Ok(Self::new(ptr))
-					} else {
-						Err(de::Error::custom(format_args!(
-							"relative reference to wrong type ???:{}, expected {}:{}",
-							id,
+				if id == type_id::<T>() {
+					if !(build == local) {
+						log::warn!(
+							"relative reference to {}:{}, this is not recommended",
 							type_name::<T>(),
-							type_id::<T>()
-						)))
+							id
+						);
 					}
+					Ok(Self::new(ptr))
 				} else {
 					Err(de::Error::custom(format_args!(
-						"relative reference came from a different binary {}, expected {}",
-						build, local
+						"relative reference to wrong type ???:{}, expected {}:{}",
+						id,
+						type_name::<T>(),
+						type_id::<T>()
 					)))
 				}
 			},

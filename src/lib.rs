@@ -64,7 +64,7 @@
 
 
 use serde::{
-	de::{self, Deserialize, Deserializer}, ser::{Serialize, Serializer}
+	de::{Deserialize, Deserializer}, ser::{Serialize, Serializer}
 };
 use std::{
 	any::{type_name, Any, TypeId}, cmp, fmt, hash, marker, mem::transmute
@@ -230,7 +230,7 @@ impl<'de, T: ?Sized + 'static> Deserialize<'de> for Vtable<T> {
 					}
 				} else {
 					log::warn!(
-						"relative reference to wrong type {}:{}, expected {}:{}",
+						"relative reference to wrong type {}:{}, expected {}",
 						id,
 						type_name::<T>(),
 						type_id::<T>()
